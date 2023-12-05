@@ -9,26 +9,28 @@ const wordToNumberMap = {
     'seven': 'sev7ven',
     'eight': 'eigh8ight',
     'nine': 'nin9ine'
+};
+
+function partOne(filename) {
+    const inputArray = fs.readFileSync(filename, { encoding: 'utf-8' }).trim().split('\r\n');
+    return convertWrittenDigits(inputArray)
+        .map(extractFirstAndLastNumber)
+        .reduce((a, b) => a + b, 0);
 }
 
-function partOne(filenname) {
-    const lines = fs.readFileSync(filenname, { encoding: 'utf-8' }).trim().split('\r\n');
-    console.log(lines);
-    const lines2 = lines.map((line) => {
-        for (let word in wordToNumberMap) {
-            let regex = new RegExp(word, 'gi');
-            line = line.replace(regex, wordToNumberMap[word]);
+function convertWrittenDigits(inputArray) {
+    return inputArray.map(line => {
+        for (const [word, number] of Object.entries(wordToNumberMap)) {
+            const regex = new RegExp(word, 'gi');
+            line = line.replace(regex, number);
         }
         return line;
     });
-    console.log(lines2);
-    const numbers = lines2.map((line) => {
-        let firstNumber = line.split('').find((number) => Number.isInteger(Number(number)));
-        let lastNumber = line.split('').findLast((number) => Number.isInteger(Number(number)));
-        return Number(firstNumber + lastNumber);
-    });
-    return numbers.reduce((a, b) => a + b, 0);
+}
 
+function extractFirstAndLastNumber(line) {
+    const numbers = line.match(/\d/g);
+    return Number(numbers[0] + numbers[numbers.length - 1]);
 }
 
 console.log(partOne('./input.txt'));
