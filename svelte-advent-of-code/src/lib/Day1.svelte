@@ -3,11 +3,35 @@
   let formattedArray;
   let inputArray;
   let overAllNumber = 0;
+  const wordToNumberMap = {
+    one: 1,
+    two: 2,
+    three: 3,
+    four: 4,
+    five: 5,
+    six: 6,
+    seven: 7,
+    eight: 8,
+    nine: 9,
+  };
+  let I
 
   async function loadInputData() {
     const response = await fetch("inputDay1.txt");
     inputText = await response.text();
     inputArray = inputText.split("\n");
+    formattedArray = convertSpelledLetter();
+  }
+
+  function convertSpelledLetter() {
+    const resultArray = inputArray.map((element) => {
+      Object.keys(wordToNumberMap).forEach((word) => {
+        const regex = new RegExp(word);
+        
+      });
+      return element;
+    });
+    return resultArray;
   }
 
   function solveProblem() {
@@ -31,6 +55,7 @@
   import { onMount } from "svelte";
   onMount(async () => {
     await loadInputData();
+
     solveProblem();
   });
 </script>
@@ -40,6 +65,7 @@
 
   {#if inputText}
     <h2>Input Data</h2>
+    <pre>{formattedArray}</pre>
     <pre>{inputArray}</pre>
     <pre>{overAllNumber}</pre>
   {/if}
